@@ -1,0 +1,23 @@
+1. initialization of struct variable
+typedef struct x{ type1 a; type2 b}x;
+initialization ways:
+1.1
+x v;
+x.a=a1;
+x.b=b1;
+In 1.2 and 1.3, it's better to do a type cast to the {} variable, although no
+error in a stack variable(1.2), compiling error for a pointer(1.3).
+1.2
+x v;
+v = (x){a1,a2};
+v = (x){.a=a1,.b=b1};
+1.3
+x *v = (x*)malloc(sizeof(x));
+*v = (x){a1,b1};
+
+
+2. use == to compare pointers
+If pointers are NULL or point the same address,
+it returens true;
+else
+it returns false
