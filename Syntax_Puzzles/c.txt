@@ -21,3 +21,13 @@ If pointers are NULL or point the same address,
 it returens true;
 else
 it returns false
+
+
+3. main function must return a int result, cant return void
+
+4. reference variable as a function arguments
+void a(string &)
+string b;
+a(&b); // this is invalid
+string &c = b;
+a(c); // this is valid
