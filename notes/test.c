@@ -26,5 +26,10 @@ int main(){
 	int c,d= 20;
 	printf("c & d: %i, %i\n", c, d);
 
+	a = 4;
+	b = 3;
+	double division = (double)a/b;
+	printf("show a/b has a decimals or note: %f\n", division);
+
 	return 0;
 }
