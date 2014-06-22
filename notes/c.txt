@@ -32,4 +32,11 @@ a(&b); // this is invalid
 string &c = b;
 a(c); // this is valid
 
+4. the copy constructor of cpp is used for the object copy usage
+Most cases needed a copy construtor are in deep copy conditions, meaning that
+there's a pointer of the object's member variable needing to make a copy of  the object
+it points to but the address only
 
+5. use the parameter list of the constructors often.
+
+6. vector find push_back
