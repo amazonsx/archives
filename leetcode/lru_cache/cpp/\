@@ -1,0 +1,117 @@
+#include <iostream>
+#include <vector>
+#include <limits>
+using namespace std;
+
+class CacheUnit{
+	private:
+		int key;
+		int value;
+		int valid;
+		int counter;
+	public:
+		CacheUnit()::key(0),value(0),valid(0),counter(0){}
+		void set(int key, int value){
+			this.key = key;
+			this.value = value;
+			this.valid = 1;
+		}
+		int getKey(int key) {
+			//if (this.valid && (key == this.key)) return 1;
+			if (key == this.key) return 1;
+			return 0;
+		}
+		int getValue(){
+			if(!valid) return -1;
+			return value;
+		}
+		void getCounter(){
+			if(!valid) return -1;
+			return counter;
+		}
+		int getValid(){
+			return valid;
+		}
+		int getValid(int val) {
+			if ((val == -1) && (val == this.valid))
+				return 0;
+			return 1;
+		}
+		void setValid(int valid){
+			this.valid = valid;
+			if(!this.valid)	this.counter = 0;
+		}
+};
+
+class LRUCache{
+	private:
+		int capacity;
+	    int length; 	
+		//minimum stack
+		vector<CacheUnit> cacheTable;
+		void heapify();
+		void insert(int key, int value);
+		void increase(int i);
+	public:
+	    LRUCache(int capacity) {
+			this.capacity = capacity;
+			this.length = 0;
+	    }
+	    int get(int key);
+	   	void set(int key, int value); 
+};
+/*
+ * keep the validation of the cacheTable as a minimum heap
+ */
+void LRUCache::heapify(int i) {
+	// exit entry of recursion
+	if (i == this.length) return;
+	// init some flags
+	int min = i; // index of min counter of cache unit 
+	int min_c = this.cacheTable[i].getCounter(); // counter of the min element
+	int l_int = (i>>1) + 1;			// left child
+	int r_int = (i+1) >> 1;			// right child
+	int flag = (l_int<=length)?1:0; // flag of child existense
+	if (flag) { // handle the left child
+		if(cacheTable[l_int].getCounter()< min_c){
+			min = l_int;	
+			min_c = this.cacheTable[l_int].getCounter(); 
+		}	
+		flag = r_int<=length?1:0;
+		if (flag) { // handle the right child
+			if(cacheTable[r_int].getCounter()< min_c){
+				min = r_int;	
+				min_c = this.cacheTable[r_int].getCounter(); 
+			}	
+		}
+	} 
+	// swap the min and i
+	if (min != i) {
+		CacheUnit tmp = this.cacheTable[min];							
+		this.cacheTable[min] = this.cacheTable[i];
+		this.cacheTable[i] = tmp;
+		// recursion
+		this.heapify(min);	
+	}
+}
+/*
+ * get the value by key
+ */
+int LRUCache::get(int key) {
+	if (!length) return -1;
+	int i = 0;
+	for (; i < length; i ++){
+		CacheUnit *cu = this.cacheTable + i;
+		int flag = cu->getKey(key);		
+		if (!flag) continue;
+		else return cu->getvalue();
+	}
+	return -1;
+}
+
+void LRUCache::set(int key, int value) {
+}
+
+int main(int argv, char *argv[]){
+	return 1;
+}

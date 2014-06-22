@@ -13,7 +13,7 @@ class CacheUnit{
 		int valid_;
 		int counter_;
 	public:
-		CacheUnit():key_(0),value_(0),valid_(0),counter_(1){}
+		CacheUnit():key_(0),value_(0),valid_(0),counter_(0){}
 		void set(int key, int value){
 			key_ = key;
 			value_ = value;
@@ -54,7 +54,7 @@ class CacheUnit{
 			counter_ ++;
 		}
 		void initCounter(){
-			counter_ = 1;
+			counter_ = 0;
 		}
 };
 
@@ -63,14 +63,16 @@ class LRUCache{
 		int capacity_;
 	    int length_; 	
 		//minimum stack
-		vector<CacheUnit> cache_table_;
+		int *cache_table_;
 		map<int, int> cache_map_;
 		void heapify(int i);
 		void insert(int key, int value);
 		void increase(int i);
 		void decrease(int i);
 	public:
-	    LRUCache(int capacity):capacity_(capacity),length_(0){ }
+	    LRUCache(int capacity):capacity_(capacity),length_(0){ 
+			cache_table_ = new int[capacity];
+		}
 		int getCapacity() {
 			return capacity_;
 		}
@@ -123,35 +125,6 @@ void LRUCache::heapify(int i) {
 	// exit entry of recursion
 	if (i == length_) return;
 	// init some flags
-	int min = i; // index of min counter of cache unit 
-	int min_c = cache_table_[i].getCounter(); // counter of the min element
-	int l_int = (i>>1) + 1;			// left child
-	int flag = (l_int<=(length_-1))?1:0; // flag of child existense
-	if (flag) { // handle the left child
-		if(cache_table_[l_int].getCounter() <= min_c){
-			min = l_int;	
-			min_c = cache_table_[l_int].getCounter(); 
-		}	
-		int r_int = (i+1) >> 1;			// right child
-		flag = (r_int<=length_-1)?1:0;
-		if (flag) { // handle the right child
-			if(cache_table_[r_int].getCounter() <= min_c){
-				min = r_int;	
-				min_c = cache_table_[r_int].getCounter(); 
-			}	
-		}
-	}
-	// swap the min and i
-	if (min != i) {
-		CacheUnit tmp = cache_table_[min];							
-		cache_table_[min] = cache_table_[i];
-		cache_table_[i] = tmp;
-		cache_map_[cache_table_[min].getKey()] = min;
-		cache_map_[cache_table_[i].getKey()] = i;
-		// recursion
-		heapify(min);	
-	} 
-	cache_table_[min].initCounter();
 	return;
 }
 /*
