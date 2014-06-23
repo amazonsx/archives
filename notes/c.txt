@@ -40,3 +40,9 @@ it points to but the address only
 5. use the parameter list of the constructors often.
 
 6. vector find push_back
+
+7. it's better to init an array, created with new method.
+It seems that not all compilers will init the inside elements for you
+
+8. if you  define a pointer pointing to an array with new method, you will
+found that sizeof(the pointer)/sizeof(type) will not return the length of the array.
