@@ -10,14 +10,13 @@ class CacheUnit{
 	private:
 		int key_;
 		int value_;
-		int valid_;
-		int counter_;
 	public:
-		CacheUnit():key_(0),value_(0),valid_(0),counter_(0){}
+		CacheUnit *next_;
+		CacheUnit *prev_;
+		CacheUnit():key_(0),value_(0){}
 		void set(int key, int value){
 			key_ = key;
 			value_ = value;
-			valid_ = 1;
 		}
 		void setValue(int value) {
 			value_ = value;
@@ -31,30 +30,36 @@ class CacheUnit{
 			return 0;
 		}
 		int getValue(){
-			if(!valid_) return -1;
 			return value_;
 		}
-		int getCounter(){
-			if(!valid_) return -1;
-			return counter_;
+		void sentinelInit(){
+			next_ = this;
+			prev_ = this;
 		}
-		int getValid(){
-			return valid_;
+		// insert after this element
+		// return the inserted pointer 
+		CacheUnit* insert(int key, int value) {
+			CacheUnit *cu = new CacheUnit();
+			cu->set(key, value);
+			cu->next_ = next_;
+			cu->prev_ = this;
+			next_->prev_ = cu;
+			next_ = cu;
+			return next_;
 		}
-		int getValid(int val) {
-			if ((val == -1) && (!valid_))
-				return 0;
-			return 1;
+		CacheUnit* insert(CacheUnit *pro) {
+			CacheUnit *cu = pro;
+			cu->next_ = next_;
+			cu->prev_ = this;
+			next_->prev_ = cu;
+			next_ = cu;
+			return next_;
 		}
-		void setValid(int valid){
-			valid_ = valid;
-			if(!valid_)	counter_ = 0;
-		}
-		void increaseCounter(){
-			counter_ ++;
-		}
-		void initCounter(){
-			counter_ = 0;
+		// replace before this element
+		// return the setinel
+		CacheUnit* replace(int key, int value) {
+			set(key, value);
+			return prev_;
 		}
 };
 
@@ -62,16 +67,18 @@ class LRUCache{
 	private:
 		int capacity_;
 	    int length_; 	
-		//minimum stack
-		int *cache_table_;
-		map<int, int> cache_map_;
-		void heapify(int i);
+		//sentinel
+		CacheUnit *cache_list_;
+		map<int, CacheUnit*> cache_map_;
 		void insert(int key, int value);
-		void increase(int i);
-		void decrease(int i);
+		void replace(int key, int value);
+		void promote(CacheUnit *pro);
 	public:
 	    LRUCache(int capacity):capacity_(capacity),length_(0){ 
-			cache_table_ = new int[capacity];
+			if (capacity_>0){
+				cache_list_ = new CacheUnit();
+				cache_list_->sentinelInit();
+			}
 		}
 		int getCapacity() {
 			return capacity_;
@@ -79,109 +86,49 @@ class LRUCache{
 		int getLength() {
 			return length_;
 		}
-		vector<CacheUnit> getCacheTable() {
-			return cache_table_;
+		CacheUnit* getCacheTable() {
+			return cache_list_;
 		}
 	    int get(int key);
 	   	void set(int key, int value); 
 };
-/*
- * increase a counter by 1
- */
-void LRUCache::increase(int i) {
-	cache_table_[i].increaseCounter();
-	heapify(i);
-}
-/*
- * default to init a infinite counter to 1
- */
-void LRUCache::decrease(int i) {
-	int index = i;
-	int parent = (index-1) >> 1;	
-	CacheUnit tmp_cu;
-	while((parent >= 0) && (cache_table_[parent].getCounter() > cache_table_[index].getCounter())) {
-		tmp_cu = cache_table_[index];	
-		cache_table_[index] = cache_table_[parent];
-		cache_table_[parent] = tmp_cu;
-		cache_map_[cache_table_[index].getKey()] = index;
-		cache_map_[cache_table_[parent].getKey()] = parent;
-		index = parent;
-		parent = (index-1) >> 1;
-	}
-}
-void LRUCache::insert(int key, int value) {
-	if (length_ == capacity_) return;
-	length_ ++;
-	CacheUnit cu;
-	cu.set(key, value);
-	cache_table_.push_back(cu);
-	cache_map_[key] = length_ - 1;
-	decrease(length_ - 1);
-}
-/*
- * keep the validation of the cache_table as a minimum heap
- */
-void LRUCache::heapify(int i) {
-	// exit entry of recursion
-	if (i == length_) return;
-	// init some flags
-	return;
-}
-/*
- * get the value by key
- */
+
 int LRUCache::get(int key) {
 	if (!length_) return -1;
-	map<int, int>::iterator it;
-	it = cache_map_.find(key);
-	if (it == cache_map_.end()) return -1;
-	else {
-		int index = it->second;
-		int res = cache_table_[index].getValue();
-#ifdef DEBUG
-		cout << "GET BEGIN----------------------"  << endl;
-		for (int j = 0; j < length_; j ++) {
-			cout << cache_table_[j].getCounter() << "    " << cache_table_[j].getKey() << "    " << cache_table_[j].getValue() << endl;
-		}
-		cout << endl;
-#endif 
-		increase(index);
-#ifdef DEBUG
-		for (int j = 0; j < length_; j ++) {
-			cout << cache_table_[j].getCounter() << "    " << cache_table_[j].getKey() << "    " << cache_table_[j].getValue() << endl;
-		}
-		cout << endl;
-		cout << "GET END----------------------"  << endl;
-#endif
-		return res;
-	}
+	map<int, CacheUnit*>::iterator i_res = cache_map_.find(key);
+	if (i_res == cache_map_.end()) return -1;
+	// else
+	CacheUnit* p_res = i_res->second;	
+	promote(p_res);
+	return p_res->getValue();
 }
-
+void LRUCache::insert (int key, int value) {
+	CacheUnit *inserted = cache_list_->insert(key, value);
+	cache_map_[inserted->getKey()] = inserted;
+	length_ ++;
+}
+void LRUCache::replace (int key, int value) {
+	cache_list_ = cache_list_->replace(key, value);
+	cache_map_.erase(cache_list_->getKey());
+	cache_map_[cache_list_->next_->getKey()] = cache_list_->next_;
+}
+void LRUCache::promote (CacheUnit *pro) {
+	CacheUnit *tmp = pro->prev_;
+	tmp->next_ = pro->next_;
+	pro->next_->prev_ = tmp;
+	cache_list_->insert(pro);
+}
 void LRUCache::set(int key, int value) {
-	int presence = -1;
-	if (!length_) presence = -1;
-	map<int, int>::iterator it;
-	it = cache_map_.find(key);
-	if (it == cache_map_.end()) {}
-	else {
-		int index = it->second;
-		cache_table_[index].setValue(value);
-		cache_table_[index].initCounter();
-		heapify(index);
-		return;
-	}
-	if (length_ == capacity_) {
-		CacheUnit cu;
-		cu.set(key, value);
-		cache_map_.erase(cache_table_[0].getKey());
-		cache_table_[0] = cu;
-		cache_map_[key] = 0;
-		return;
+	map<int, CacheUnit*>::iterator i_res = cache_map_.find(key);
+	if (i_res == cache_map_.end()) {
+		if (length_ < capacity_) insert(key, value);
+		else replace(key, value);
 	} else {
-		insert(key, value);
+		CacheUnit* p_res = i_res->second;	
+		p_res->setValue(value);
+		promote(p_res);
 	}
 }
-
 int main(int argc, char *argv[]){
 	LRUCache lc(2);
 	cout << "the capacity is :" << lc.getCapacity() << endl;
@@ -195,19 +142,19 @@ int main(int argc, char *argv[]){
 		int value = vals[i];
 		int length = lc.getLength();
 		lc.set(key, value);
-		cout << "SET BEGIN--------------------"  << endl;
 		cout << "set key :" << key << " set value: "  << value << endl;
 		if (gets[i] != -1) {
 			int res = lc.get(gets[i]);
 			cout << "get result---------------: " << res << endl;
 		}
 		length = lc.getLength();
-		/*
+		CacheUnit *init = lc.getCacheTable()->next_;
 		for (int j = 0; j < length; j ++) {
-			cout << lc.getCacheTable()[j].getCounter() << "   " << lc.getCacheTable()[j].getKey() << endl;
+			cout << init->getKey() << "   " << init->getValue() << endl;
+			init = init->next_;
 		}
-		*/
-		cout << "SET END--------------------" << endl;
+		cout << endl;
+		
 	}	
 	int length = lc.getLength();
 	cout << "The length is : " << length << endl;
