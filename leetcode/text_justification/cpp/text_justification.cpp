@@ -7,14 +7,14 @@ using namespace std;
 
 class Solution {
 	private:
-		void mergesort(vector<unsigned int> &v_len);
+		void mergesort(vector<int> &v_len);
 	public:
 		vector<string> fullJustify(vector<string> &words, int L);
 };
-void Solution::mergesort(vector<unsigned int> &v_len) {
+void Solution::mergesort(vector<int> &v_len) {
 	if (!v_len.size()) return;
 	int len = v_len.size();
-	vector<unsigned int> tmp;
+	vector<int> tmp;
 	for (int i = 1; i < len/2 +1; i *= 2) {
 		int merge_count = i << 1;
 		for ( int j = 0; j < len; j++) {
@@ -51,16 +51,16 @@ vector<string> Solution::fullJustify(vector<string> &words, int L) {
 		res.push_back(s);
 		return res;
 	}
-	vector<unsigned int> v_len;
-	map<unsigned int, vector<int> > len_map;
-	for (unsigned int i = 0; i < words.size(); i ++)  {
+	vector<int> v_len;
+	map<int, vector<int> > len_map;
+	for (int i = 0; i < words.size(); i ++)  {
 		int len = words[i].size();
 		v_len.push_back(len);
 		len_map[len].push_back(i);
 	}
 	//mergesort(v_len);
 
-	unsigned int count = 0; 	
+	int count = 0; 	
 	vector<int> container;	
 	while (count < words.size()) {
 		int remain = L;
@@ -70,31 +70,35 @@ vector<string> Solution::fullJustify(vector<string> &words, int L) {
 				container.push_back(len_map[v_len[i]].front());
 				len_map[v_len[i]].erase(len_map[v_len[i]].begin());
 				remain -= v_len[i];
+				remain --;
 				v_len[i] = -1;
 				count ++;
 				continue;
-			}
+			} 
+			break;
 		}
+		remain ++;
 		int pad = 0;
 		int extra_add_one = 0;
 		// divide 0, floating point exception
-		//if (count != v_len.size()) {
-		if (container.size() != 1) {
-			pad = remain/(container.size() -1);
-			extra_add_one = remain%(container.size() -1);
+		if (count != v_len.size()) {
+			if (container.size() != 1) {
+				pad = remain/(container.size() -1) + 1;
+				extra_add_one = remain%(container.size() -1);
+			} else {
+				pad = remain;
+			}
 		} else {
-			pad =remain;
+			pad = 1;
 		}
-		//} else {
-		//	pad = 1;
-		//	extra_add_one = 0;
-		//}
 		string line;
 		for ( int i = 0; i < container.size(); i ++) {
 			line += words[container[i]];
-			if ( count == v_len.size()) continue;
-			if ( i == container.size() - 1) break;
-			for (int j = 0; j < (pad + extra_add_one); j ++) {
+			//if ( count == v_len.size()) continue;
+			if ((container.size() > 1) &&(i == container.size() - 1)) break;
+			if ((count == v_len.size()) &&( i == container.size() - 1)) break;
+			int plus_one = (extra_add_one>0)?1:0;
+			for (int j = 0; j < (pad + plus_one); j ++) {
 				line += ' ';	
 			}
 			if (extra_add_one > 0) extra_add_one --;
@@ -119,7 +123,7 @@ int main(int argc, char *argv[]){
 		words.push_back(word_list[i]);
 	}
 	vector<string> res = s.fullJustify(words, 16);
-	for (unsigned int i = 0; i < res.size(); i ++) {
+	for (int i = 0; i < res.size(); i ++) {
 		cout << "\""<< res[i] <<"\""<< endl;	
 	}
 
@@ -130,7 +134,7 @@ int main(int argc, char *argv[]){
 		words.push_back(word_list_l[i]);
 	}
 	res = s.fullJustify(words, 16);
-	for (unsigned int i = 0; i < res.size(); i ++) {
+	for (int i = 0; i < res.size(); i ++) {
 		cout << "\""<< res[i] <<"\""<< endl;	
 	}
 
@@ -141,7 +145,7 @@ int main(int argc, char *argv[]){
 		words.push_back(word_list_ll[i]);
 	}
 	res = s.fullJustify(words, 1);
-	for (unsigned int i = 0; i < res.size(); i ++) {
+	for (int i = 0; i < res.size(); i ++) {
 		cout << "\""<< res[i] <<"\""<< endl;	
 	}
 
@@ -152,7 +156,40 @@ int main(int argc, char *argv[]){
 		words.push_back(word_list_lll[i]);
 	}
 	res = s.fullJustify(words, 3);
-	for (unsigned int i = 0; i < res.size(); i ++) {
+	for (int i = 0; i < res.size(); i ++) {
+		cout << "\""<< res[i] <<"\""<< endl;	
+	}
+
+	string word_list_llll[] = {"Listen","to","many,","speak","to","a","few."};
+	//string word_list[] = {"Give", "me", "a", "new", "TEST", "text", "justification"};
+	words.clear();
+	for ( int i = 0; i < 7; i ++ ) {
+		words.push_back(word_list_llll[i]);
+	}
+	res = s.fullJustify(words, 6);
+	for (int i = 0; i < res.size(); i ++) {
+		cout << "\""<< res[i] <<"\""<< endl;	
+	}
+
+	string word_list_lllll[] = {"What","must","be","shall","be."};
+	//string word_list[] = {"Give", "me", "a", "new", "TEST", "text", "justification"};
+	words.clear();
+	for ( int i = 0; i < 5; i ++ ) {
+		words.push_back(word_list_lllll[i]);
+	}
+	res = s.fullJustify(words, 12);
+	for (int i = 0; i < res.size(); i ++) {
+		cout << "\""<< res[i] <<"\""<< endl;	
+	}
+
+	string word_list_llllll[] = {"Don't","go","around","saying","the","world","owes","you","a","living;","the","world","owes","you","nothing;","it","was","here","first."};
+	//string word_list[] = {"Give", "me", "a", "new", "TEST", "text", "justification"};
+	words.clear();
+	for ( int i = 0; i < 19; i ++ ) {
+		words.push_back(word_list_llllll[i]);
+	}
+	res = s.fullJustify(words, 30);
+	for (int i = 0; i < res.size(); i ++) {
 		cout << "\""<< res[i] <<"\""<< endl;	
 	}
 	return 1;
