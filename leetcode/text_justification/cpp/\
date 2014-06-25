@@ -1,0 +1,100 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#define DEBUG
+using namespace std;
+
+class Solution {
+	private:
+		void mergesort(vector<unsigned int> &v_len);
+	public:
+		vector<string> fullJustify(vector<string> &words, int L);
+};
+void Solution::mergesort(vector<unsigned int> &v_len) {
+	if (!v_len.size()) return;
+	int len = v_len.size();
+	vector<unsigned int> tmp;
+	for (int i = 1; i < len/2 +1; i *= 2) {
+		int merge_count = i << 2;
+		for ( int j = 0; j < len; j++) {
+			int left = j;
+			int mid = j + merge_count;
+			if ( mid >= len) continue;
+			int right = mid + merge_count -1;
+			for ( int k = left; k <= right; k ++){
+
+			}
+		}
+	}	
+} 
+
+vector<string> Solution::fullJustify(vector<string> &words, int L) {
+	vector<string> res;
+	if (!L) return res;
+	if (!words.size()) {
+		string s;
+		for (int i = 0; i < L; i ++) s += ' ';
+		res.push_back(res);
+		return res;
+	}
+	vector<unsigned int> v_len;
+	map<unsigned int, vector<int> > len_map;
+	for (unsigned int i = 0; i < words.size(); i ++)  {
+		int len = words[i].size();
+		v_len.push_back(len);
+		len_map[len].push_back(i);
+	}
+	mergesort(v_len);
+
+	unsigned int count = 0; 	
+	vector<int> container;	
+	for (count < words.size()) {
+		int remain = L;
+		for (int i = 0; i < v_len.size(); i ++ ) {
+			if ( v_len[i] == -1) continue;
+			if ( v_len[i] < remain ) {
+				container.push_back(len_map[v_len[i]].back());
+				len_map[v_len[i]].pop_back();
+				remain -= v_len[i];
+				v_len[i] = -1;
+				count ++;
+				continue;
+			}
+			break;
+		}
+		int pad = 0;
+		int extra_add_one = 0;
+		if ((count != words.size()) && (!remain)) {
+			pad = remain/(container.size() -1);
+			extra_add_one = remain%(container.size() -1);
+		}
+		string line;
+		for ( int i = 0; i < container.size(); i ++) {
+			line += words[container[i]]
+			for (int j = 0; j < (pad + extra_add_one); j ++) {
+				line += ' ';	
+			}
+			if (!extra_add_one) extra_add_one --;
+		}	
+		if ((count == words.size()) && (!remain)) {
+			for (int j = 0; j < remain; j ++) {
+				line += ' ';	
+			}
+		}
+		container.erase();
+		res.push_back(line);
+	}
+	
+	return res;
+}
+
+int main(int argc, char *argv[]) {
+	Solution s;
+	vector<string> words("This", "is", "an", "example", "of", "text", "justification");
+	vector<string> res = s.fullJustify(words);
+	for (int i = 0; i < res.size(); i ++) {
+		cout << res[i] << endl;	
+	}
+	return 1;
+}
