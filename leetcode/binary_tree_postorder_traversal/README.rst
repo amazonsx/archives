@@ -14,21 +14,26 @@ Note: Recursive solution is trivial, could you do it iteratively?
 Thoughts:
 
 Recursion method:
-    access the current point
-    if (left(current) || right(current) is NULL return
     if (left(current) access preorder(left(current))
     if (right(current) access preorder(right(current))
+    access the current point
+    return
 
 
 Iterative method:
     stack s;
-    access the current point
-    push(s, right)
-    push(s, left)
+    p = current
+    while(p) {
+        push(s, p)
+        p = p->left;
+    }
     while (!s.empty()) {
-        point = s.pop()
-        access point
-        push(s, right)
-        push(s, left)
+        current = s.pop()
+        p = current
+        while(p) {
+            push(s, p)
+            p = p->left
+        }
+        access current
     }
 
