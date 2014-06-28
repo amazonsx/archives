@@ -17,3 +17,9 @@ All words have the same length.
 All words contain only lowercase alphabetic characters.
 
 g++ -o test -std=c++0x  -ggdb -Wall word_ladder_ii.cpp
+
+
+Thouths:
+
+I always want to solve it with graph shortest path algorithms.
+But it seems that BFS is good enough to handle this.
