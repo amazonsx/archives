@@ -127,8 +127,8 @@ int Solution::ladderLength(string start, string end, unordered_set<string> &dict
 	if (len == 0) return 0;
 	// what if start == end
 	if (start == end) return 0;
-	dict.insert(start);
-	dict.insert(end);
+	if (dict.find(start) != dict.end()) dict.insert(start);
+	if (dict.find(end) != dict.end()) dict.insert(end);
 	int start_index = 0, end_index = 0;
 	len = dict.size();
 	vector<vector<int> > g;
@@ -141,19 +141,23 @@ int Solution::ladderLength(string start, string end, unordered_set<string> &dict
 	unordered_set<string>::iterator d_iter = dict.begin();
 	while(d_iter != dict.end()) {
 		v_dict.push_back(*d_iter);
+#ifdef DEBUG
+		cout << *d_iter << "   " << endl;
+#endif 
 		d_iter ++;
 	}
-	vector<string>::iterator iter1 = v_dict.begin(), iter2 = v_dict.begin();
+#ifdef DEBUG
+	cout << endl;
+#endif 
 	int edge_count = 0;
 	for ( int i = 0; i < len; i ++) {
-		if (*iter1 == start) start_index = i;
-		else if (*iter1 == end) end_index = i;
-		iter2 = iter1;
+		if ( v_dict[i] == start) start_index = i;
+		else if ( v_dict[i] == end) end_index = i;
 		for ( int j = i; j < len; j ++) {
 			int tmp = 0;
-			if (iter1 != iter2) {
+			if (v_dict[i] != v_dict[j]) {
 				for(int k = 0; k < word_len; k ++) {
-					if ((*iter1)[k] != (*iter2)[k]) tmp ++;
+					if (v_dict[i][k] != v_dict[j][k]) tmp ++;
 					if (tmp>1)  break;
 				}
 			}
@@ -162,9 +166,7 @@ int Solution::ladderLength(string start, string end, unordered_set<string> &dict
 				g[j].push_back(i);
 				edge_count ++;
 			}
-			iter2 ++;
 		}
-		iter1 ++;
 	}
 	if (edge_count == 0) return 0;
 	return dijkstra(g, start_index, end_index) + 1; 
