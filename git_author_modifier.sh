@@ -8,13 +8,13 @@ cm="$GIT_COMMITTER_EMAIL"
  
 if [ "$GIT_COMMITTER_EMAIL" = "root@guoshi20.(none)" ]
 then
-    cn="amazonsx"
-    cm="465290180@qq.com"
+    cn="Your new usernmae"
+    cm="Your new email addr"
 fi
 if [ "$GIT_AUTHOR_EMAIL" = "root@guoshi20.(none)" ]
 then
-    an="amazonsx" 
-    am="465290180@qq.com"
+    an="Your new username" 
+    am="Your new email addr"
 fi 
 export GIT_AUTHOR_NAME="$an" 
 export GIT_AUTHOR_EMAIL="$am"
