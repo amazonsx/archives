@@ -13,6 +13,7 @@ The number of ways decoding "12" is 2.
 
 
 Thoughts:
+coner cases: a '0' char
 
 Now I got two ways to solve this problem.
 1.
