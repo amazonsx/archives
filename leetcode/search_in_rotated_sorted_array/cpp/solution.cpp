@@ -33,7 +33,7 @@ int Solution::binarySearch(int A[], int n, int target) {
         } else if ( target < smaller_max) {
             if ( target > mid_value) start = start + 1;
             else {
-                if ( flag && (mid_value > larger_min)) start = start + 1;
+                if ( flag && (mid_value > larger_min)) start = mid + 1;
                 else end = mid - 1;
             }
         }
