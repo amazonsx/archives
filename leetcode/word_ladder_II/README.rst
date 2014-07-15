@@ -19,3 +19,25 @@ Note:
     All words contain only lowercase alphabetic characters.
 
 g++ -o test -std=c++0x  -ggdb -Wall word_ladder_ii.cpp
+
+Solution:
+
+Idea 1.
+We use a graph to represent the relationship of the words.
+If they have a single char difference, then draw a edge to connect these nodes.
+We use a adjecent list to describe the graph.
+Space Complexity: O(VE)
+
+And then, there's a list to store all the pathes have been accessed 
+before reaching the final word.
+Space Complexity: O(VE)
+
+But leetcode gave a fallback ---- Memory Limit Execeed.
+
+Idea 2.
+Optimization by optimization !!!!
+
+
+
+
+
