@@ -26,7 +26,7 @@ int Solution::bellman_ford( vector<Edge> edges, const string start, const string
 	int n = res.size();
 	string u, v;
 	res[start] = 0;
-	for (unsigned int i = 0; i < edges.size(); i ++ ) {
+	for (int i = 0; i < edges.size(); i ++ ) {
 		u = edges[i].u;	
 		v = edges[i].v;	
 		if ( u == start) res[v] = 1;
