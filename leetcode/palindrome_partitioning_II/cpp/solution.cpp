@@ -60,34 +60,6 @@ int Solution::minCutWA( string s){
     return res - 1;
 }
 
-int Solution::minCutWA(string s) {
-    if( (s.size() == 0) && (s.size() == 1))  return 0;
-    int head = 0, tail = s.size() - 1;
-    int totalLen = 0, res = 0;
-    while (totalLen != (signed)s.size() ) {
-        while( tail >= head )  {
-            int currentLeft = head, currentRight = tail, flag = 1;
-            while (currentLeft <= currentRight) {
-                if (s[currentLeft] == s[currentRight]) {
-                    currentLeft ++;
-                    currentRight --;
-                } else {
-                    flag = 0;
-                    break;
-                }
-            }
-            if (flag) {
-                totalLen += tail - head + 1;
-                res ++;
-                head = tail + 1;
-                tail = s.size() - 1;
-                break;
-            } else tail --;
-        }
-    }
-    return res - 1;
-}
-
 int main(int argc, char *argv[]) {
     Solution s;
     string str1("aab");
