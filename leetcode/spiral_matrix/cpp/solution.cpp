@@ -7,44 +7,39 @@ using namespace std;
 
 class Solution {
 private:
-    void matrixEdgeTraversal(vector< vector<int> > &matrix, 
-            int &top, int &bottom, int &left, int &right, vector<int> &res);
+    void spiralTraversal(vector< vector<int> > &matrix, 
+            int top, int bottom, int left, int right, vector<int> &res);
 public:
     vector<int> spiralOrder(vector< vector<int> > &matrix);
 };
-void Solution::matrixEdgeTraversal(vector< vector<int> > &matrix, 
-        int &top, int &bottom, int &left, int &right, vector<int> &res) {
-    if ((left > right) || (top > bottom))   return;
-    if ((left == right) && (top == bottom)) {
-        res.push_back(matrix[top][left]);
-        return;
-    }
-    int i = top, j = left;
-    while (j <= right) 
-        res.push_back(matrix[i][j++]);
-    i ++; 
-    j --;
-    right --;
-    if (top == bottom)   return;
-    while (i <= bottom)
-        res.push_back(matrix[i++][j]);
-    j --;
-    i --;
-    bottom --;
-    if (left == right)   return;
-    while (j >= left)
-        res.push_back(matrix[i][j--]);
-    i --;
-    j ++;
-    left ++;
+
+void Solution::spiralTraversal(vector< vector<int> > &matrix, 
+        int top, int bottom, int left, int right, vector<int> &res) {
+    if (top > bottom)   return;
+    if (left > right)   return;
+    // horizonal cursor, vertical cursor
+    int h_cursor = left, v_cursor = top;
+    
+    while(h_cursor <= right)
+        res.push_back(matrix[v_cursor][h_cursor++]);
     if (top == bottom)  return;
-    while (i > top)
-        res.push_back(matrix[i--][j]);
-    j ++;
-    i ++;
-    top ++;
-    if (left == right) return;
-    matrixEdgeTraversal(matrix, top, bottom, left, right, res);
+    h_cursor --;
+    v_cursor ++;
+
+    while(v_cursor <= bottom)
+        res.push_back(matrix[v_cursor++][h_cursor]);
+    if (left == right)  return;
+    h_cursor --;
+    v_cursor --;
+
+    while(h_cursor >= left)
+        res.push_back(matrix[v_cursor][h_cursor--]);
+    h_cursor ++;
+    v_cursor --;
+
+    while(v_cursor > top)
+        res.push_back(matrix[v_cursor--][h_cursor]);
+    spiralTraversal(matrix, top+1, bottom -1, left + 1, right -1, res);
 }
 
 vector<int> Solution::spiralOrder(vector< vector<int> > &matrix) {
@@ -53,7 +48,7 @@ vector<int> Solution::spiralOrder(vector< vector<int> > &matrix) {
     int top = 0, bottom = matrix.size() - 1;
     if (matrix[0].empty())  return res;
     int left = 0, right = matrix[0].size() - 1;
-    matrixEdgeTraversal( matrix, top, bottom, left, right ,res);
+    spiralTraversal( matrix, top, bottom, left, right, res);
     return res;
 }
 
