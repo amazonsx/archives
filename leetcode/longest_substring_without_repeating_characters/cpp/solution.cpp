@@ -17,10 +17,9 @@ int Solution::lengthOfLongestSubstring(string s) {
             if (locMap[s[current]] >= start) {
                 if (tmpMax > max) {
                     max = tmpMax;
-                    cout << locMap[s[current]]  << "   "<< current << endl;
-                    start = locMap[s[current]] + 1;
-                    tmpMax = current - start;
                 }
+                start = locMap[s[current]] + 1;
+                tmpMax = current - start;
             }
         }
         tmpMax ++;
