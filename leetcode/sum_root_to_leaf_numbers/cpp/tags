@@ -1,0 +1,22 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+DEBUG	solution.cc	3;"	kind:macro	line:3	language:C++	file:
+Solution	solution.cc	/^class Solution {$/;"	kind:class	line:12	language:C++	file:
+Solution::sumNumbers	solution.cc	/^    int sumNumbers(TreeNode *root);$/;"	kind:prototype	line:14	language:C++	class:Solution	file:	access:public	signature:(TreeNode *root)
+TreeNode	solution.cc	/^    TreeNode(int x):val(x) {}$/;"	kind:function	line:9	language:C++	struct:TreeNode	access:public	signature:(int x)
+TreeNode	solution.cc	/^struct TreeNode{$/;"	kind:struct	line:6	language:C++	file:
+TreeNode::TreeNode	solution.cc	/^    TreeNode(int x):val(x) {}$/;"	kind:function	line:9	language:C++	struct:TreeNode	access:public	signature:(int x)
+TreeNode::left	solution.cc	/^    TreeNode *left, *right; $/;"	kind:member	line:8	language:C++	struct:TreeNode	file:	access:public
+TreeNode::right	solution.cc	/^    TreeNode *left, *right; $/;"	kind:member	line:8	language:C++	struct:TreeNode	file:	access:public
+TreeNode::val	solution.cc	/^    int val;$/;"	kind:member	line:7	language:C++	struct:TreeNode	file:	access:public
+left	solution.cc	/^    TreeNode *left, *right; $/;"	kind:member	line:8	language:C++	struct:TreeNode	file:	access:public
+main	solution.cc	/^int main(int argc, char *argv[]) {$/;"	kind:function	line:43	language:C++	signature:(int argc, char *argv[])
+right	solution.cc	/^    TreeNode *left, *right; $/;"	kind:member	line:8	language:C++	struct:TreeNode	file:	access:public
+solution.cc	solution.cc	1;"	kind:file	line:1	language:C++
+sumNumbers	solution.cc	/^    int sumNumbers(TreeNode *root);$/;"	kind:prototype	line:14	language:C++	class:Solution	file:	access:public	signature:(TreeNode *root)
+sumNumbers	solution.cc	/^int sumNumbers(TreeNode *root){$/;"	kind:function	line:17	language:C++	signature:(TreeNode *root)
+val	solution.cc	/^    int val;$/;"	kind:member	line:7	language:C++	struct:TreeNode	file:	access:public
