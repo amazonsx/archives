@@ -58,14 +58,6 @@ struct ConSeq {
     ConSeq(int start, int end):start(start), end(end){}
 };
 
-int Solution::longestConsecutive( vector<int> &num) {
-    if ( num.empty())   return 0;
-    int res = 0;
-    map<int, ConSeq*> SeqMap;
-    for ( int i = 0; i < (signed)num.size(); i ++) {
-    }
-    return res;
-}
 
 int main(int argc, char *argv[]) {
     int arr[] = {1, 22, 2, 32, 4, 35, 6, 31, 34, 5, 3};
