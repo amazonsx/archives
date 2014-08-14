@@ -27,16 +27,16 @@ ListNode *Solution::reverseBetween( ListNode *head, int m, int n) {
         current = current->next;
     }
     ListNode *former = nodeM, *next = NULL;
-    for (; i < ((m+n)>> 1)-1; i ++) {
+    for (; i < ((m+n)>> 1); i ++) {
         next = current->next;
         current->next = former;
         former = current;
         current = next;
     }
-    if ((m-n) > 1)  mid = current;
+    if ((n-m) > 1)  mid = former;
     else mid = nodeM;
-    right = mid->next;
-    mid->next = former;
+    right = current; //mid->next;
+    //mid->next = former;
 
     if ((m+n)%2 == 0)  left = mid->next;
     else    left = mid;
@@ -49,14 +49,17 @@ ListNode *Solution::reverseBetween( ListNode *head, int m, int n) {
         currentR->val = tmp;
 
         next = currentL->next;
-        former = currentL;
         if ( currentL != former) {
             currentL->next = former;
         }
+        former = currentL;
         currentL = next;
         currentR = currentR->next;
     }
     mid->next = right;
+    if ((n+m)%2 == 0) {
+        left->next = mid;
+    }
     return head;
 }
 
@@ -67,14 +70,16 @@ int main(int argc, char *argv[]) {
     ListNode n4(4);
     ListNode n5(5);
     ListNode n6(6);
+    ListNode n7(7);
     n1.next = &n2;
     n2.next = &n3;
     n3.next = &n4;
     n4.next = &n5;
     n5.next = &n6;
+    n6.next = &n7;
 
     Solution s;
-    ListNode *head = s.reverseBetween(&n1, 1, 2);
+    ListNode *head = s.reverseBetween(&n1, 2, 6);
     while (head) {
         cout << head->val << "  " ;
         head = head->next;
