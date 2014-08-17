@@ -15,6 +15,7 @@ public:
     int minCutWA(string s);
     int minCut(string s);
     int minCutBest(string s);
+    int minCutSX(string s);
 };
 
 int Solution::minCutBest(string s) {
