@@ -9,25 +9,18 @@ public:
 
 int Solution::removeDuplicates(int A[], int n) {
     if (n <= 1) return n;
-    int former = A[0];
-    int j = 1;
+    int j = 0;
     for ( int i = 1; i < n; i ++) {
-        while (A[i] == former) {
-            i ++;
-        }
-        if (i != n){
-            A[j] = A[i];
-            former = A[j];
-            j ++;
+        if (A[i] != A[j]) {
+            A[++j] = A[i];
         }
     }
-
-    return j;
+    return j+1;
 }
 
 int main(int argc, char *argv[]) {
-    //int A[] = { -3, -1, 0, 0 };
-    int A[] = { -3, -1, 0, 0, 1, 3, 3, 4, 4, 4, 4 };
+    //int A[] = { -3, -1, 0, 0, 1, 3, 3, 4, 4, 4, 4 };
+    int A[] = { -3, -1, 0, 0};
     for ( int i = 0; i < (signed)(sizeof(A)/sizeof(int)); i ++)
         cout << A[i] << "  " ;
     cout << endl;
@@ -41,3 +34,4 @@ int main(int argc, char *argv[]) {
 
 	return 1;
 }
+
