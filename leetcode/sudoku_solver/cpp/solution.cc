@@ -11,3 +11,10 @@ class Solution {
 public:
     void solveSudoku(vector<vector<char> > &boards);
 };
+
+void Solution::solveSudoku(vector<vector<char> > &boards) {
+}
+
+int main(int argc, char *argv[]) {
+    return 1;
+}
