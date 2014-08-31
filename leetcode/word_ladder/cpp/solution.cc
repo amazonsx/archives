@@ -26,44 +26,32 @@ class Solution{
 };
 
 int Solution::ladderLength_bfs(string start, string end, unordered_set<string> &dict) {
-    if (dict.empty())   return 0;
-	// what if start == end
-	if (start == end) return 0;
-    dict.insert(end);
+    if (start == end)   return 0;
+    if ( dict.empty())  return 0;
 
-    map<string, bool> accessed;
-
-    int len = 0;
-    queue<string> nodeQueue;
-    nodeQueue.push(start);
-    queue<int> lenQueue;
-    lenQueue.push(1);
-    while(!nodeQueue.empty()) {
-        string current = nodeQueue.front();
-        nodeQueue.pop();
-        accessed[current] = true;
-        int currentLen = lenQueue.front();
-        lenQueue.pop();
-        if (current == end)  {
-            len = currentLen;
-            break;
-        }
+    queue<string> levelTra;
+    levelTra.push(start);
+    queue<int> lenQ;
+    lenQ.push(1);
+    while ( !levelTra.empty() ) {
+        string current = levelTra.front();
+        int depth = lenQ.front();
+        levelTra.pop();
+        lenQ.pop();
         for ( int i = 0; i < (signed)current.size(); i ++) {
-            for ( int j = 0; j < 26; j ++) {
-                if (current[i] == 'a'+j)    continue;
-                string neighbor = current;
-                neighbor[i] = 'a' + j;
-                if (dict.find(neighbor) != dict.end()) {
-                    if (accessed.find(neighbor) != accessed.end())  continue; 
-                    else {
-                        nodeQueue.push(neighbor);
-                        lenQueue.push(currentLen + 1);
-                    }
-                }
+            for ( char c = 'a'; c <= 'z'; c ++) {
+                if ( current[i] == c)   continue; 
+                string next = current;
+                next[i] = c;
+                if ( next == end)   return depth + 1;
+                if ( dict.find(next) == dict.end() )    continue;
+                levelTra.push(next);
+                dict.erase(next);
+                lenQ.push(depth+1);
             }
         }
     }
-    return len;
+    return 0;
 }
 int Solution::bellman_ford( vector<Edge> edges, const string start, const string end, map<string, int> &res){
 	int n = res.size();
