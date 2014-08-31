@@ -1,4 +1,9 @@
 Given n points on a 2D plane, 
 find the maximum number of points that lie on the same straight line.
 
-first try: 11:00, Thurs, June 5th, 2014, a implementation in cpp
+
+NOTE:
+int the map, you can count the current start point into the count or not.
+If you donot count it inside, some variables initial value should be considered carefully
+
+
