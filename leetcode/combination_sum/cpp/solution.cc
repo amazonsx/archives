@@ -42,40 +42,42 @@ vector<vector<int> > Solution::combinationSum( vector<int> &candidates, int targ
     quicksort( candidates, 0, candidates.size()-1);
     vector<vector<vector<vector<int> > > >  sumMap( candidates.size(), 
             vector<vector<vector<int> > >(target+1, vector<vector<int> >()));
-
-    for ( int sum = candidates[0]+1; sum <= target; sum ++) {
-        cout << " sum : " << sum << endl;
-        for ( int i = 0; i < (signed)candidates.size(); i ++) {
-            if ( candidates[i] > sum)   break;
-            int diff = sum;
-            for ( int j = 1; j <= sum/candidates[i]; j ++) {
-                diff -= candidates[i];
-                for ( int k = i; k < (signed)candidates.size(); k ++) {
-                    vector<vector<int> > &postfix = sumMap[k][diff];
-                    if ( postfix.empty() && (k == i) && (diff == 0) ) {
-                        sumMap[i][sum].push_back(vector<int>());
-                        for ( int n = 0; n < j; n ++) {
-                            sumMap[i][sum].back().push_back(candidates[i]);
-                        }
-                    }
-                    for ( int m = 0; m < (signed)postfix.size(); m ++) {
-                        if ( (k == i) && (diff != 0) ) { 
-                            if ( postfix[m][0] == postfix[m].back())    continue;
-                        }
-                        sumMap[i][sum].push_back(vector<int>());
-                        for ( int n = 0; n < j; n ++) {
-                            sumMap[i][sum].back().push_back(candidates[i]);
-                        }
-                        sumMap[i][sum].back().insert(sumMap[i][sum].back().end(),
-                                postfix[m].begin(), postfix[m].end());
-                    }
+    for ( int sum = 0; sum <= target; sum ++) {
+#ifdef DEBUG
+        cout << " ---- sum : " << sum << endl;
+#endif
+        for ( int i = 0; i < (signed)candidates.size(); i ++ ) {
+#ifdef DEBUG
+            cout << "  ========== candidates " << candidates[i] << endl;
+#endif
+            if ( candidates[i] > sum ) {
+                if ( sum == 0) {
+                    sumMap[i][0].push_back(vector<int>());
+                }
+                continue;
+            } else if ( candidates[i] == sum ) {
+                sumMap[i][sum].push_back(vector<int>(1, sum ));
+                continue;
+            }
+            int diff = sum - candidates[i];
+            for ( int j = i; j < (signed)candidates.size(); j ++) {
+#ifdef DEBUG
+                cout << " candidates partner value and v size ^^^^^^^^^" << candidates[j] << "   " << sumMap[j][diff].size() << endl;
+#endif
+                for ( int k = 0; k < (signed)sumMap[j][diff].size(); k ++ ) {
+                    vector<vector<int> > &sub = sumMap[j][diff];
+                    sumMap[i][sum].push_back(vector<int>(1, candidates[i]));
+                    sumMap[i][sum].back().insert(sumMap[i][sum].back().end(),
+                            sub[k].begin(), sub[k].end() );
                 }
             }
         }
     }
     vector<vector<int> > res;
-    for (int i = 0; i < (signed)candidates.size(); i ++) {
-        res.insert(res.end(), sumMap[i][target+1].begin(), sumMap[i][target+1].end());
+    for ( int i = 0; i < (signed)candidates.size(); i ++) {
+        for ( int j = 0; j < (signed)sumMap[i][target].size(); j ++) {
+            res.push_back(sumMap[i][target][j]);
+        }
     }
     return res;
 }
