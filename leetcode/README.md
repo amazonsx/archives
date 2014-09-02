@@ -5,6 +5,7 @@ Hope all of them works.
 *************************************
 First Class:
 Really Simple and it is easy to write bug free programs.
+Basic algorithms.
 No need to review these again.
 
 Second Class:
