@@ -3,7 +3,7 @@ find the maximum number of points that lie on the same straight line.
 
 
 NOTE:
-int the map, you can count the current start point into the count or not.
-If you donot count it inside, some variables initial value should be considered carefully
+In the map, you can count the current start point into the count or not.
+If you do not count it inside, some variables' initial value should be considered carefully
 
 

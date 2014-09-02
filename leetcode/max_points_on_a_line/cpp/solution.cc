@@ -1,18 +1,11 @@
-/*
- * The cpp implentation of max points on a line
- * Caveat:
- *	boundary condition:
- *		points with same x value;
- *		points with same x an y value;
- *		to be continued 
- *		Its very complicated
- */
 #include <iostream>
 #include <vector>
 #include <map>
 #include <limits>
 #include <math.h>
 #include <stdlib.h>
+#include <assert.h>
+#define MULTIPLE_SOLUTION
 #define DEBUG
 using namespace std;
 
@@ -25,11 +18,39 @@ struct Point {
 typedef struct Point Point;
 
 class Solution{
-	public:
-		int maxPoints(vector<Point> &points);
+private:
+    int maxPointsS1(vector<Point> &points);
+    int maxPointsS2(vector<Point> &points);
+public:
+    int maxPoints(vector<Point> &points);
 };
 
-int Solution::maxPoints(vector<Point> &points){
+int Solution::maxPointsS1(vector<Point> &points) {
+    int max = 0;
+    map<double, int> countMap;
+    for ( int i = 0; i < (signed)points.size(); i ++) {
+        countMap.clear();
+        int tmpMax = 1, coincideCount = 0;
+        for ( int j = i+1; j < (signed)points.size(); j ++) {
+            double slope  = numeric_limits<double>::infinity();
+            if ( points[j].x == points[i].x) {
+                if ( points[j].y == points[j].y) {
+                    coincideCount ++; 
+                    continue;
+                }
+            } else { slope = 1.0*( points[j].y - points[i].y )/(points[j].x - points[i].x); }
+            if (countMap.find(slope) == countMap.end() ) {
+                countMap[slope] = 1;
+            }
+            countMap[slope] ++;
+            if (countMap[slope] > tmpMax)   tmpMax = countMap[slope];
+        }
+        if ( max < (tmpMax + coincideCount) )  max = tmpMax + coincideCount;
+    }
+    return max;
+}
+
+int Solution::maxPointsS2(vector<Point> &points){
 	int max = 0;
 	//in these special cases, we can get results immediately
 	int size = points.size();
@@ -51,11 +72,18 @@ int Solution::maxPoints(vector<Point> &points){
             linePoints[slope] ++;
             if ( linePoints[slope] > tmpMax) tmpMax = linePoints[slope];
         }
-        cout << samePoints << "       " << tmpMax << endl;
         if ( max < (samePoints + tmpMax))   max = samePoints + tmpMax;
     }
-
 	return max+1;
+}
+
+int Solution::maxPoints(vector<Point> &points){
+    int res = maxPointsS1(points);
+#ifdef MULTIPLE_SOLUTION
+    int res1 = maxPointsS2(points);
+    assert(res == res1);
+#endif
+    return res;
 }
 
 int main(int argc, char *argv[]){
