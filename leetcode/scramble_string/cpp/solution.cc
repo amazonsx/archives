@@ -15,7 +15,6 @@ class Solution {
 
 bool Solution::recognizeScramble( string &s1, string &s2,
         int begin1, int begin2, int len, map<int, map<int, map<int, bool> > > &accessed) {
-    cout << begin1 << "   " << begin2 << "   " << len << endl;
     if ( accessed.find(begin1) != accessed.end()) {
         if (accessed[begin1].find(begin2) != accessed[begin1].end()) {
             if (accessed[begin1][begin2].find(len) != accessed[begin1][begin2].end()) {
@@ -105,8 +104,12 @@ int main(int argc, char *argv[]) {
        string s1("bbbaaaaccaabbbaa");
        string s2("baababaababacabc");
        */
+    /*
     string s1("xstjzkfpkggnhjzkpfjoguxvkbuopi");
     string s2("xbouipkvxugojfpkzjhnggkpfkzjts");
+    */
+    string s1("pcighfdjnbwfkohtklrecxnooxyipj");
+    string s2("npodkfchrfpxliocgtnykhxwjbojie");
     timeval first, second;
     Solution s;
     gettimeofday( &first, NULL);
