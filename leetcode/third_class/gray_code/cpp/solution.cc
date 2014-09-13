@@ -11,7 +11,30 @@ class Solution {
         void subCode(vector<int> &res, string &str, int left, int n);
     public:
         vector<int> grayCode(int n);
+        vector<int> grayCode2(int n);
 };
+
+vector<int> Solution::grayCode2(int n ) {
+    vector<int> res;
+    if (n ==0) {
+        res.push_back(0);
+        return res;
+    }
+    if ( n == 1) {
+        res.push_back(1);
+        res.push_back(1);
+        return res;
+    }
+    vector<int> former = grayCode2(n-1);
+    int msd = 0; // most significant digit
+    for ( int i = 0; i < (signed)former.size(); i ++) {
+        int current = former[i] << 1;
+        res.push_back(current + msd);
+        res.push_back(current + 1 - msd);
+        msd = 1 - msd;
+    }
+    return res;
+}
 
 int Solution::convert(string str) {
     int res = 0;
@@ -22,6 +45,7 @@ int Solution::convert(string str) {
     return res;
 }
 
+// left means the distance from the highest bit/least significant bit
 void Solution::subCode(vector<int> &res, string &str, int left, int n) {
     if (left == (n-1)) {
         res.push_back(convert(str));
