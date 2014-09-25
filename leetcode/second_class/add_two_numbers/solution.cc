@@ -17,6 +17,8 @@ public:
 ListNode* Solution::addTwoNumbers(ListNode *l1, ListNode *l2) {
     ListNode *cursor1 = l1, *cursor2 = l2, *cursor1_former;
     int carryFlag = 0;
+    // I cant even remember why would I do this..
+    // cursor1 || cursor2 is a good loop condition
     while (cursor2 != NULL) {
         if (cursor1 == NULL) {
             ListNode *node = new ListNode(0);
