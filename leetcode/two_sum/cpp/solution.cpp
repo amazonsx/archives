@@ -22,7 +22,7 @@ public:
  * although I implement it stable.
  * average time complexity - theta(nlgn)
  * worst time complexity - o(n2)
- * It seems that quicksort is two slow
+ * It seems that quicksort is too slow
  */
 void Solution::quicksort(vector<int> &numbers, int left, int right) {
     if (left >= right)  return;
@@ -111,23 +111,9 @@ vector<int> Solution::twoSum(vector<int> &numbers, int target){
     for ( unsigned i = 0; i < numbers.size(); i ++) {
         numLoc[numbers[i]].push_back( i + 1);
     }
-#ifdef DEBUG
-    struct timeval first;
-    gettimeofday( &first, NULL);
-#endif
     // sort the list to accelerate the search
     //quicksort( numbers, 0, numbers.size() - 1);
     mergesort( numbers, 0, numbers.size() - 1);
-#ifdef DEBUG
-    struct timeval second;
-    gettimeofday( &second, NULL);
-    cout << "quick sort time cost ---- " 
-        << 1000000 * (second.tv_sec - first.tv_sec) + second.tv_usec - first.tv_usec << endl;
-#endif
-    
-#ifdef DEBUG
-    gettimeofday( &first, NULL);
-#endif
     for (unsigned int i = 0; i < numbers.size(); i ++) {
         int other = target - numbers[i];
         if (other < numbers[i]) return res;
@@ -146,11 +132,6 @@ vector<int> Solution::twoSum(vector<int> &numbers, int target){
             break;
         }
     }
-#ifdef DEBUG
-    gettimeofday( &second, NULL);
-    cout << "search time cost ---- " 
-        << 1000000 * (second.tv_sec - first.tv_sec) + second.tv_usec - first.tv_usec << endl;
-#endif
     return res;
 }
 
