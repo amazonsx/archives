@@ -26,7 +26,6 @@ string Solution::longestPalindrome(string s) {
             }
         }
     }
-    cout << maxLen << endl;
     return s.substr(begin, maxLen);
 }
 
