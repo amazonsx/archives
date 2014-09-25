@@ -1,10 +1,34 @@
 #include <iostream>
 #include <assert.h>
+#include <algorithm>
+#include <limits>
+#include <assert.h>
 #include <vector>
 #define DEBUG
 using namespace std;
 
 class Solution {
+private:
+    double findKth(int A[], int m, int B[], int n, int k) {
+        assert( m > 0 || n > 0);
+        if ( m == 0)    return B[k-1];
+        if ( n == 0)    return A[k-1];
+        if ( k == 1) {
+            return min(A[0], B[0]);
+        }
+        int indexm = (k/2<=m)? k/2-1:m-1;
+        int indexn = (k/2<=n)? k/2-1:n-1;
+        int a = A[indexm];
+        int b = B[indexn];
+        if ( a < b) {
+            return findKth(A+indexm+1, m-indexm-1, B, n, k-indexm-1);
+        } else if (a > b) {
+            return findKth(A, m, B+indexn+1, n-indexn-1, k-indexn-1);
+        } else {
+            if ( k%2 == 0)  return a;
+            else return findKth(A+indexm+1, m-indexm-1, B+indexn+1, n-indexn-1, 1);
+        }
+    }
 public:
     double findMedianSortedArrays(int A[], int m, int B[], int n);
     double findMedianSortedArraysBruteForce(int A[], int m, int B[], int n);
@@ -82,34 +106,18 @@ double Solution::findMedianSortedArraysBruteForce(int A[], int m, int B[], int n
         j ++;
     }
     int left = (m+n)/2;
-    int right = left + (((m+n)%2==0)?1:0);
-    return (mergeArray[left]+mergeArray[right])/2;
+    int right = left - (((m+n)%2==0)?1:0);
+    return ((double)mergeArray[left]+mergeArray[right])/2;
 }
 
 double Solution::findMedianSortedArrays(int A[], int m, int B[], int n) {
-    cout << m << "   " << n << endl;
-    assert( (m > 0) || (n > 0));
-    if ( m == 0 || n == 0) {
-        int *C = (m == 0)?B:A;
-        if ( n%2 == 0) {
-            return ((double)C[n/2-1] + C[n/2])/2;
-        } else return C[n/2];
-    } else if ( m == 1 && n == 1) {
-        return ((double)A[0] + B[0])/2;
-    } else if ( m == 1 ) {
-
-    } else if ( n == 1 ) {
-    }
-    int mid1 = m/2 - ((m%2 == 0)?1:0);
-    int mid2 = n/2 - ((n%2 == 0)?1:0);
-    if (A[mid1] <= B[mid2]) {
-        int disposeLen = min( mid1+1, n-mid2-1);
-        return findMedianSortedArrays( A+disposeLen, m-disposeLen, B, n-disposeLen);
+    assert( m>0 || n > 0);
+    if ( (m+n)%2 == 0) {
+        return ( findKth(A, m, B, n, (m+n)/2)+
+                findKth(A, m, B, n, (m+n)/2+1))/2;
     } else {
-        int disposeLen = min( m-mid1-1, mid2+1);
-        return findMedianSortedArrays( A, m-disposeLen, B+disposeLen, n-disposeLen);
+        return findKth(A, m, B, n, (m+n)/2+1);
     }
-    return 0.0;
 }
 
 int main(int argc, char *argv[]) {
@@ -123,8 +131,10 @@ int main(int argc, char *argv[]) {
     //int B[] = {1, 2, 3};
     //int A[] = {1, 1};
     //int B[] = {1, 1};
-    int A[] = {3};
-    int B[] = {1, 2, 4, 5};
+    //int A[] = {3};
+    //int B[] = {1, 2, 4, 5};
+    int A[] = {};
+    int B[] = {2, 3};
     Solution s;
     cout << s.findMedianSortedArraysBruteForce(A, sizeof(A)/sizeof(int), B, sizeof(B)/sizeof(int)) 
         << "   expected   " <<  5.5 << endl;
