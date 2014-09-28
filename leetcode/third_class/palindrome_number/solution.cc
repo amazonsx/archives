@@ -1,14 +1,54 @@
 #include <iostream>
+#include <math.h>
 #include <sys/time.h>
 #define DEBUG
 using namespace std;
 
 class Solution {
-private:
-    int calMaxDigit(int &x, int &expected);
-public:
-    bool isPalindrome(int x);
+    private:
+        int calMaxDigit(int &x, int &expected);
+    public:
+        bool isPalindromeWithExtraSpace(int x);
+        bool isPalindromeX(int x);
+        bool isPalindrome(int x);
 };
+bool Solution::isPalindrome(int x) {
+    if (x < 0)  return false;
+    int highbit = 0;
+    while ( pow(10, highbit) <= x) highbit ++;
+    int mid = highbit >> 1;
+    int i = 0;
+    while (i < mid) {
+        int tmp = pow(10, highbit-i-1);
+        int high = x/tmp;
+        x %= tmp;
+
+        tmp = pow(10, i+1); 
+        int low = x%tmp/(tmp/10);
+        x -= low*tmp/10;
+
+        if (high != low)    return false;
+        if ( x == 0)    break;
+        i ++;
+    }
+    return true;
+}
+
+bool Solution::isPalindromeWithExtraSpace(int x) {
+    if (x < 0)  return false;
+    string strx("");
+    while (x > 0) {
+        strx += (char)('0' + x%10);
+        x /= 10;
+    }
+    int mid = strx.size() >> 1;
+    int i = 0;
+    while ( i < mid ) {
+        if (strx[i] != strx[strx.size() - i - 1])   return false;
+        i ++;
+    }
+    return true;
+}
 
 int Solution::calMaxDigit(int &x, int &expected) {
     unsigned int tmp = 1;
@@ -57,7 +97,7 @@ int Solution::calMaxDigit(int &x, int &expected) {
     return res;
 }
 
-bool Solution::isPalindrome(int x) { 
+bool Solution::isPalindromeX(int x) { 
     int expected = 0;
     while ( x != 0 ) { 
         cout << x << endl;
@@ -76,11 +116,14 @@ int main(int argc, char *argv[]) {
     //int x = 1874994781;
     //int x = 10000021;
     int x = 1000110001;
+    //int x = 1001;
+    //int x = 121;
+    //int x = 1000110001;
     Solution s;
     timeval first, second;
     gettimeofday( &first, NULL);
     cout << s.isPalindrome(x) << endl;
     gettimeofday( &second, NULL);
     cout << 1000000* (second.tv_sec - first.tv_sec) + second.tv_usec - first.tv_usec << endl;
-	return 1;
+    return 1;
 }
