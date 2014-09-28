@@ -6,12 +6,26 @@ using namespace std;
 
 class Solution {
 public:
+    string convertCostsMuchSpace(string s, int row);
     string convert(string s, int row);
 };
-
 string Solution::convert(string s, int row) {
-    vector<char> sub;
-    vector<vector<char> > zigzagPath(row, sub);
+    if ( row == 1) return s;
+    string res("");
+    int jump = row * 2 - 2;
+    for ( int i = 0; i < row; i ++) {
+        for ( int j = i; j < (signed)s.size(); j += jump) {
+            res += s[j];
+            if ( (i!=0) && (i!=row-1) && (j+jump-2*i<s.size())) {
+                res += s[j+jump-2*i];
+            }
+        }
+    }
+    return res;
+}
+
+string Solution::convertCostsMuchSpace(string s, int row) {
+    vector<vector<char> > zigzagPath(row, vector<char>());
     //0: go down, 1: go up
     int direction = 0;
     int len = s.size(), index = 0; 
