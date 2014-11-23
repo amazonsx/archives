@@ -1,0 +1,21 @@
+/* this is a test of comments remove */
+
+/*
+ * this is a test
+ * of comments remove
+ */
+
+//this is a test of comments remove
+
+char *s1 = "this is a test of comments remove."; //this is a test of comments remove
+
+char *s2 = "this is a /*test of comments */ remove.";  /* this is a test of comments remove */
+
+char *s3 = "this is a //test of comments */ remove.";   /* this is a test of comments remove */
+
+char *s4 = "\"/* this is a test of comments */\"";
+
+char *s5 = "\"/* this is a test of comments */\"   \" //this is a test of comments remove\"";
+
+char *s7 = "\\\"\/*this is a test of comments */\\";
+char s6 = '\*';

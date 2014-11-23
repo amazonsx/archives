@@ -1,0 +1,15 @@
+[]
+{}
+()
+""
+''
+int arr[(1+2+3)]
+char *s  = "\"\'";
+{
+    char *abc = "asdf\'";    
+    char b = '\"';
+    int arr[] = {1, 2 , (3+4)};
+}
+
+char *s = ""this is a string";
+
